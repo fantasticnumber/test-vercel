@@ -1,0 +1,19 @@
+{
+  "name": "test-vercel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-fantasticnumber:fantasticnumber/test-vercel.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vercel/node": "^1.15.2",
+    "axios": "^0.27.2"
+  }
+}
