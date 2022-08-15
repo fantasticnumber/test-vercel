@@ -12,6 +12,8 @@ export default async function (req: VercelRequest, res: VercelResponse) {
           resolve({ fields, files });
         });
       });
+      res.send(data);
+      return
       const cookie = data.cookie;
       const album = data.album;
       const resp = await axios({
