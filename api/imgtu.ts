@@ -1,4 +1,6 @@
 import axios from "axios";
+import FormData from 'form-data';
+import fs from 'fs';
 import multiparty from 'multiparty';
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
@@ -12,10 +14,10 @@ export default async function (req: VercelRequest, res: VercelResponse) {
           resolve({ fields, files });
         });
       });
-      res.send(data);
-      return
-      const cookie = data.cookie;
-      const album = data.album;
+      const cookie = data.fields.album[0];
+      const album = data.fields.cookie[0];
+      const file = data.files.file[0].path;
+
       const resp = await axios({
         url: `https://imgtu.com/album/${album}`,
         method: 'get',
@@ -24,21 +26,23 @@ export default async function (req: VercelRequest, res: VercelResponse) {
         }
       });
       const token = resp.data.match(/PF\.obj\.config\.auth_token\s=\s"(.*?)"/)[1];
+      
+      const formData: any = new FormData();
+      formData.append('source', fs.createReadStream(file));
+      formData.append('type', 'file');
+      formData.append('action', 'upload');
+      formData.append('timestamp', Date.now());
+      formData.append('auth_token', token);
+      formData.append('nsfw', 0);
+      formData.append('album_id', album);
       const response = await axios({
         url: "https://imgtu.com/json",
         method: 'post',
         headers: {
           cookie,
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
-        data: {
-          source: data.file,
-          type: "file",
-          action: "upload",
-          timestamp: Date.now(),
-          auth_token: token,
-          nsfw: 0,
-          album_id: album
-        }
+        data: formData
       });
       res.send(response.data);
     } catch (e) {
