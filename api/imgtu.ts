@@ -35,12 +35,21 @@ export default async function (req: VercelRequest, res: VercelResponse) {
       formData.append('auth_token', token);
       formData.append('nsfw', 0);
       formData.append('album_id', album);
+      const len: number = await new Promise((resolve, reject) => {
+        formData.getLength((err, len) => {
+          if (err) {
+            reject(err);
+            return
+          }
+          resolve(len);
+        })
+      });
       const response = await axios({
         url: "https://imgtu.com/json",
         method: 'post',
         headers: {
           cookie,
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          'Content-Length': len
         },
         data: formData
       });
