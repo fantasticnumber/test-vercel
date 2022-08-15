@@ -1,11 +1,19 @@
 import axios from "axios";
+import multiparty from 'multiparty';
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 export default async function (req: VercelRequest, res: VercelResponse) {
   if (req.method!.toUpperCase() === "POST") {
     try {
-      const cookie = req.body.cookie;
-      const album = req.body.album;
+      const form = new multiparty.Form();
+      const data: any = await new Promise((resolve, reject) => {
+        form.parse(req, function (err, fields, files) {
+          if (err) reject({ err });
+          resolve({ fields, files });
+        });
+      });
+      const cookie = data.cookie;
+      const album = data.album;
       const resp = await axios({
         url: `https://imgtu.com/album/${album}`,
         method: 'get',
@@ -21,7 +29,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
           cookie,
         },
         data: {
-          source: req.body.file,
+          source: data.file,
           type: "file",
           action: "upload",
           timestamp: Date.now(),
