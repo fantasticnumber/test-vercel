@@ -55,7 +55,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
       });
       res.send(response.data);
     } catch (e) {
-      res.send(e.toString());
+      res.send(e);
     }
   } else {
     res.send("Post only!");
