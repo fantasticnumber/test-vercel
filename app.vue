@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from 'axios';
-const result = ref("");
+const result = ref("not yet");
 onMounted(async () => {
   const res = await axios({
     method: "post",
