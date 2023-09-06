@@ -4,7 +4,7 @@ const result = ref("not yet");
 onMounted(async () => {
   const res = await axios({
     method: "post",
-    url: "/api/test",
+    url: "/api/nested/test",
     data: {}
   })
   result.value = res.data;
