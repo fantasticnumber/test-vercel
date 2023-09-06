@@ -10,6 +10,6 @@ export default defineEventHandler(async (event) => {
 
   
   return {
-    msg: "works"
+    msg: process.env.NITRO_PRESET === "node-server" ? "pure node" : "not pure node"
   }
 });
