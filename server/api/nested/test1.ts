@@ -11,6 +11,6 @@ export default defineEventHandler(async (event) => {
 
   
   return {
-    msg: (await axios({url: "https://bing.com"})).data
+    msg: process.env.NITRO_PRESET
   }
 });
